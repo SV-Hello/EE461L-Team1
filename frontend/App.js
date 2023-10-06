@@ -1,7 +1,9 @@
 import logo from './logo.svg';
 import './App.css';
-import Shape from './Shape.js'
-import BackgroundBox from './BackgroundBox.js';
+
+import Login from './components/Login.js'
+import AccessProjectPage from './components/AccessProjectPage';
+import Project from './components/Project';
 
 function login() {
   alert('Login Attempted!')
@@ -16,34 +18,10 @@ function App() {
     <div className="App">
       <header className="App-header">
 
-        {/*Login*/}
-        <BackgroundBox>
-        
-        <Shape width = "400px" height = "50px" text = "User Login"></Shape>
-        <label>
-          Username: <input name="myInput" />
-        </label>
-        <Spacer height="20px" />
-        <button onClick={login}>Sign In</button>
-        
-        </BackgroundBox>
-        
-        {/*Sign Up*/}
-        <BackgroundBox>
+        {/*<Login></Login>*/}
+        {<AccessProjectPage></AccessProjectPage>}
+        {/*<Project></Project>*/}
 
-        <Shape width = "400px" height = "50px" text = "New Sign Up"></Shape>
-        <label>
-          Username: <input name="input" />
-        </label>
-        <Spacer height="20px" />
-        <label>
-          Password: <input name="password" />
-        </label>
-        <Spacer height="20px" />
-        <button onClick={login}>Create Account</button>
-        
-        </BackgroundBox>
-        
       </header>
     </div>
   )
