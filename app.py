@@ -45,20 +45,20 @@ def addUser(username, password):
     }
     users.insert_one(document)
 
-@app.route('/getProject/<int:id>')
+@app.route('/getProject/<string:id>')
 def checkProject(id):
     for document in projects.find():
         projID = document["projectID"]
         if projID == id:
             #should send a message to frontend that project has been found
             print("project found!")
-            return 1
+            return id
         else:
             #should send a message to frontend that project with id doesn't exist
             print("project with this id doesn't exist")
-            return 0
+            return 'project with this id does not exist'
 
-@app.route('/createProject/<int:id>')
+@app.route('/createProject/<string:id>')
 def createProject(id, description, name, hwSet1Cap, hwSet2Cap):
     for document in projects.find():
         projID = document["projectID"]
@@ -77,7 +77,7 @@ def createProject(id, description, name, hwSet1Cap, hwSet2Cap):
     }
     projects.insert_one(document)
 
-@app.route('/checkOut/<int:projectID>')
+@app.route('/checkOut/<string:projectID>')
 def checkOut(projectID, set, qnt, username):
     for document in projects.find():
         projID = document["projectID"]
@@ -154,7 +154,7 @@ def checkOut(projectID, set, qnt, username):
                             users.update_one(filter, update)
                         print("successful checkout")
                         return 1
-@app.route('/checkIn/<int:projectID>')
+@app.route('/checkIn/<string:projectID>')
 def checkIn(projectID, set, qnt, username):
     for doc in users.find():
         name = doc["username"]
@@ -193,10 +193,10 @@ def checkIn(projectID, set, qnt, username):
                         print("successful checkin")
                         return 1
 
-#if __name__ == '__main__':
-#    app.run(debug = True)
+if __name__ == '__main__':
+    app.run(debug = True)
 #addUser("johndoe", "1234")
 #checkUser("shriya", "1234")
 #createProject("A1", "birdhouse", "birdhouse", 100, 100)
-checkIn("A1", 1, 55, "shriya")
+#checkIn("A1", 1, 55, "shriya")
 
