@@ -1,30 +1,29 @@
 import logo from './logo.svg';
+import {BrowserRouter as Router, Routes, Route, Link} from "react-router-dom"
 import './App.css';
-
-import Login from './components/Login.js'
-import AccessProjectPage from './components/AccessProjectPage';
-import Project from './components/Project';
-
-function login() {
-  alert('Login Attempted!')
-}
-
-const Spacer = ({ height, width }) => {
-  return <div style={{ height, width }}></div>;
-};
+import AccessProjectPage from './Components/AccessProjectPage';
+import LoginPage from './Components/LoginPage';
 
 function App() {
-  return ( 
+  return (
     <div className="App">
       <header className="App-header">
-
-        {/*<Login></Login>*/}
-        {<AccessProjectPage></AccessProjectPage>}
-        {/*<Project></Project>*/}
-
+       <Router>
+          <div>
+          <switch>
+            <Routes>
+                <Route exact path="/" element={<LoginPage></LoginPage>} />
+                <Route path="/AccessProjectPage" element={<AccessProjectPage></AccessProjectPage>} />
+            </Routes>
+            </switch>
+            {/*<LoginPage></LoginPage>*/}
+            {/*<AccessProjectPage></AccessProjectPage>*/}
+          </div>
+        </Router>
+  
       </header>
     </div>
-  )
+  );
 }
 
 export default App;
