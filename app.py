@@ -30,12 +30,7 @@ def checkUser(username):
             print("user doesn't exist")
             return 'user does not exist'
 
-@app.route('/adduser')
-def adduser():
-   username  = request.args.get('username', None)
-   password  = request.args.get('password', None)
-
-@app.route('/adduser')
+@app.route('/addUser/<string:username>/<string:password>')
 def addUser(username, password):
     for document in users.find():
         name = document["username"]
@@ -63,15 +58,7 @@ def checkProject(id):
             print("project with this id doesn't exist")
             return 'project with this id does not exist'
 
-@app.route('/createproj')
-def createproj():
-   id  = request.args.get('id', None)
-   description  = request.args.get('description', None)
-   name  = request.args.get('name', None)
-   hwSet1Cap  = request.args.get('hwSet1Cap', None)
-   hwSet2Cap  = request.args.get('hwSet2Cap', None)
-
-@app.route('/createproj')
+@app.route('/createproj/<int:id>/<string:description>/<string:name>/<int:hwSet1Cap>/<int:hwSet2Cap>')
 def createProject(id, description, name, hwSet1Cap, hwSet2Cap):
     for document in projects.find():
         projID = document["projectID"]
@@ -90,14 +77,7 @@ def createProject(id, description, name, hwSet1Cap, hwSet2Cap):
     }
     projects.insert_one(document)
 
-@app.route('/checkout')
-def checkout():
-   projectID  = request.args.get('projectID', None)
-   set  = request.args.get('set', None)
-   qnt = request.args.get('qnt', None)
-   username  = request.args.get('username', None)
-
-@app.route('/checkout')
+@app.route('/checkOut/<string:projectID>/<string:set>/<int:qnt>/<string:username>')
 def checkOut(projectID, set, qnt, username):
     for document in projects.find():
         projID = document["projectID"]
@@ -175,14 +155,7 @@ def checkOut(projectID, set, qnt, username):
                         print("successful checkout")
                         return 1
 
-@app.route('/checkin')
-def checkin():
-   projectID  = request.args.get('projectID', None)
-   set  = request.args.get('set', None)
-   qnt = request.args.get('qnt', None)
-   username  = request.args.get('username', None)
-
-@app.route('/checkin')
+@app.route('/checkIn/<string:projectID>/<string:set>/<int:qnt>/<string:username>')
 def checkIn(projectID, set, qnt, username):
     for doc in users.find():
         name = doc["username"]
