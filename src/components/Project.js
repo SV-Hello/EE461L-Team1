@@ -1,46 +1,58 @@
 import React from 'react';
-import Shape from './Shape.js'
 import BackgroundBox from './BackgroundBox.js';
+import HardwareSet from './HardwareSet.js';
+import {Button} from '@mui/material';
+import {Link} from "react-router-dom"
 
-const Spacer = ({ height, width }) => {
-    return <div style={{ height, width }}></div>;
-  };
+function Project(props) {
+    const tableStyle = {
+        borderCollapse: 'collapse',
+        width: '100'
+    };
 
-const Project = () => {
+    const cellStyle = {
+        border: 'none',
+        width: 'fit-content',
+    };
 
     return(
-        <div>
-            <BackgroundBox>
+        <BackgroundBox backgroundColor = '#7FFFD4'> {/*Passing props from parent to child*/}
 
-                <Shape width = "600px" height = "35px" text = "Project: *projectID*"></Shape>
+        <table style={tableStyle}>
+            <tbody>
+                <tr>
+                <td style={cellStyle}>
+                    <div className="project_title_font">
+                    {props.projName || -1}
+                    </div>                        
+                </td>
 
-                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                [Capacity]
-                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                [Avalibility]
-                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                [Request]
-                <Spacer height="2px" />
-                HWSet1:
-                <input username="myUsername" />
-                <input username="myUsername" />
-                <input username="myUsername" />
+                <td style={cellStyle}>
+                    <div className="auth_users_font">
+                    list, of, authorized, users
+                    </div>
+                 </td>
+                
+                <td style={cellStyle}>
+                    {/*Custom component used multiple times*/}
+                    {/*Passing props from parent to child*/}
+                    <HardwareSet hardwareNum = '1'></HardwareSet>
+                    <HardwareSet hardwareNum = '2'></HardwareSet>     
+                </td>
 
-                <Spacer height="10px" />
-                HWSet2:
-                <input username="myUsername" />
-                <input username="myUsername" />
-                <input username="myUsername" />
+                <td style={cellStyle}>
+                    <Button 
+                        color = "primary" 
+                        variant = "contained"
+                    >Join</Button>
+                </td>
+                </tr>
+            </tbody>
+            </table>
 
-                <Spacer height="10px" />
-                <button>Check-In</button>
-                <button>Check-Out</button>
-            </BackgroundBox>
+        </BackgroundBox>
 
-        </div>
     )
-
 }
 
 export default Project;

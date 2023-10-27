@@ -1,0 +1,20 @@
+.title_font {
+    font-size: 25px;
+    font-weight: bolder;
+    color: black;
+}
+
+.project_title_font {
+    font-size: 20px;
+    color: black;
+    display: inline-block;
+    font-weight: bold;
+    margin: 10px;
+}
+
+.auth_users_font {
+    font-size: 15px;
+    color: gray;
+    display: inline-block;
+    margin: 10px;
+}
