@@ -1,19 +1,19 @@
 import React from 'react';
 
-class BackgroundBox extends React.Component {
-    render() {
-        const BackgroundBox = {
-            border: '1px solid #ccc',
-            padding: '20px',
-            backgroundColor: '#154c79',
-        };
 
+{/*Component that isn't Projects*/}
+function BackgroundBox(props) {
+    const boxStyle = {
+        backgroundColor: props.backgroundColor || '#FFE5B4',
+        border: '1px solid #ccc',
+        padding: '10px'
+    };
+    
     return (
-        <div style = {BackgroundBox}>
-            {this.props.children}
-            </div>
-        );
-    }
+        <div style = {boxStyle}>
+            {props.children}
+        </div>
+    );
 }
 
 export default BackgroundBox;

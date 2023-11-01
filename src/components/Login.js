@@ -5,7 +5,6 @@ import axios from 'axios';
 
 import Shape from './Shape.js'
 import BackgroundBox from './BackgroundBox.js';
-import AccessProjectPage from './AccessProjectPage';
 import Project from './Project';
 
 // function log() {
