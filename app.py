@@ -1,5 +1,6 @@
 import os
 import pymongo
+import sys
 
 from flask import Flask, jsonify, url_for, redirect, request
 #from flask_cors import cross_origin, CORS
@@ -17,38 +18,33 @@ users = userDB.get_collection('Users')
 projectDB = client.get_database('Projects')
 projects = projectDB.get_collection('Project')
 
-@app.route('/user/<username>')
-def checkUser(username):
-    for document in users.find():
-        name = document["username"]
-        passwrd = document["pass"]
-        if username == name:
-            print("login success!")
-            return 'login success'
+@app.route('/user/', methods=['POST'])
+def checkUser():
+    user = request.json["username"]
+    password = request.json["password"]
+    user = users.find({"username": user}).next()
+    if user is not None:
+        if user["password"] == password:
+            return {"result": "success"}
         else:
-            #should send a message to the frontend that user doesn't exist & to create new account
-            print("user doesn't exist")
-            return 'user does not exist'
+            return {"result": "failed"}
+    return {"result": "not exist"}
 
-@app.route('/adduser')
-def adduser():
-   username  = request.args.get('username', None)
-   password  = request.args.get('password', None)
-
-@app.route('/adduser')
-def addUser(username, password):
+@app.route('/adduser', methods=['POST'])
+def addUser():
+    username = request.json["username"]
+    password = request.json["password"]
     for document in users.find():
         name = document["username"]
         if name == username:
-            #should send message to the frontend that user already exists
-            print("user already exists")
-            return 0
+            return {"result": "user already exists"}
     document = {
         "username": username,
-        "pass": password,
+        "password": password,
         "requests": []
     }
     users.insert_one(document)
+    return {"result": "user successfully added"}
 
 @app.route('/getProject/<string:id>')
 def checkProject(id):

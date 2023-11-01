@@ -19,7 +19,7 @@ function App() {
       <header className="App-header">
 
         {/*<Login></Login>*/}
-        {<AccessProjectPage></AccessProjectPage>}
+        {<Login></Login>}
         {/*<Project></Project>*/}
 
       </header>
