@@ -72,7 +72,6 @@ const Login = () => {
 
     return(
         <div>
-
             {/*Login*/}
             <BackgroundBox>
             
