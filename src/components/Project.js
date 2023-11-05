@@ -16,39 +16,28 @@ function Project(props) {
     };
 
     return(
-        <BackgroundBox backgroundColor = '#7FFFD4'> {/*Passing props from parent to child*/}
+        <BackgroundBox backgroundColor = '#7FFFD4'>
+
+            <div className="project_title_font">
+                ProjectID: {props.projName || -1}
+            </div>  
 
         <table style={tableStyle}>
             <tbody>
-                <tr>
-                <td style={cellStyle}>
-                    <div className="project_title_font">
-                    {props.projName || -1}
-                    </div>                        
-                </td>
-
-                <td style={cellStyle}>
-                    <div className="auth_users_font">
-                    list, of, authorized, users
-                    </div>
-                 </td>
-                
-                <td style={cellStyle}>
-                    {/*Custom component used multiple times*/}
-                    {/*Passing props from parent to child*/}
+               
+                <td style={cellStyle}>            
                     <HardwareSet hardwareNum = '1'></HardwareSet>
                     <HardwareSet hardwareNum = '2'></HardwareSet>     
                 </td>
-
-                <td style={cellStyle}>
-                    <Button 
-                        color = "primary" 
-                        variant = "contained"
-                    >Join</Button>
-                </td>
-                </tr>
+              
             </tbody>
-            </table>
+        </table>
+
+        {/*Currently does nothing*/}
+        <Button 
+        color = "primary"   
+        variant="Contained"
+        >Back to Project Access Page</Button>
 
         </BackgroundBox>
 
