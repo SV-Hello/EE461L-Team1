@@ -5,7 +5,8 @@ import './styles.css';
 
 {/*Component that isn't Projects*/}
 function HardwareSet(props) {
-    const [quantity, setQuantity] = useState(100);
+    const [capacity, setCapacity] = useState(100);
+    const [quantity, setQuantity] = useState(capacity);
     const [input, setInput] = useState('');
 
     {/*Custom event handler to modify component's state*/}
@@ -21,7 +22,7 @@ function HardwareSet(props) {
         
         let checking = parseInt(quantity) + parseInt(input);
 
-        if(checking > 100)
+        if(checking > capacity)
             setQuantity(100);
         else   
             setQuantity(checking);
@@ -47,10 +48,10 @@ function HardwareSet(props) {
             <div className="project_title_font">
                 HWSet
                 {props.hardwareNum || -1}
-                : {quantity} / 100
+                : {quantity} / {capacity}
              </div>
                     
-            {/*Material US Component: Input*/}
+        
              <Input 
                 placeholder="Enter qty"
                 type = "number"
@@ -59,7 +60,6 @@ function HardwareSet(props) {
              />
             &nbsp;
 
-            {/*Material US Component: Button*/}
             <Button 
                 color = "primary"  
                 onClick = {CheckIn}
