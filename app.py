@@ -24,7 +24,8 @@ def checkUser():
     password = request.json["password"]
     user = users.find({"username": user}).next()
     if user is not None:
-        if user["password"] == password:
+        decryptedPass = decrypt(user["password"], 3, 1)
+        if decryptedPass == password:
             return {"result": "success"}
         else:
             return {"result": "failed"}
@@ -38,35 +39,36 @@ def addUser():
         name = document["username"]
         if name == username:
             return {"result": "user already exists"}
+    encryptedPass = encrypt(password, 3, 1)
     document = {
         "username": username,
-        "password": password,
+        "password": encryptedPass,
         "requests": []
     }
     users.insert_one(document)
     return {"result": "user successfully added"}
 
-@app.route('/getProject/<string:id>')
-def checkProject(id):
+@app.route('/getProject')
+def checkProject():
+    id = request.json["id"]
     for document in projects.find():
         projID = document["projectID"]
         if projID == id:
-            #should send a message to frontend that project has been found
-            print("project found!")
-            return id
+            return{"result": "project found"}
         else:
-            #should send a message to frontend that project with id doesn't exist
-            print("project with this id doesn't exist")
-            return 'project with this id does not exist'
+            return{"result": "project with this id doesn't exist"}
 
-@app.route('/createproj/<int:id>/<string:description>/<string:name>/<int:hwSet1Cap>/<int:hwSet2Cap>')
-def createProject(id, description, name, hwSet1Cap, hwSet2Cap):
+@app.route('/createproj')
+def createProject():
+    id = request.json["id"]
+    description = request.json["description"]
+    name = request.json["name"]
+    hwSet1Cap = request.json["hwSet1Cap"]
+    hwSet2Cap = request.json["hwSet2Cap"]
     for document in projects.find():
         projID = document["projectID"]
         if projID == id:
-            #should send message to frontend that project with this id already exists
-            print("project already with this id already exists")
-            return 0
+            return{"result": "project with this id already exists"}
     document = {
         "projectID": id,
         "name": name,
@@ -77,9 +79,13 @@ def createProject(id, description, name, hwSet1Cap, hwSet2Cap):
         "hwSet2Availability": hwSet2Cap
     }
     projects.insert_one(document)
+    return{"result": "project added"}
 
-@app.route('/checkOut/<string:projectID>/<string:set>/<int:qnt>/<string:username>')
-def checkOut(projectID, set, qnt, username):
+@app.route('/checkOut')
+def checkOut():
+    projectID = request.json["projectID"]
+    set = request.json["set"]
+    qnt = request.json["qnt"]
     for document in projects.find():
         projID = document["projectID"]
         if projID == projectID:
@@ -91,17 +97,15 @@ def checkOut(projectID, set, qnt, username):
                         "$set": {"hwSet1Availability": 0}
                     }
                     projects.update_one(filter, update)
-                    for doc in users.find():
+                    '''for doc in users.find():
                         user = doc["username"]
                         if user == username:
                             filter = {"username": username}
                             update = {
                                 "$push": {"requests": [[projectID, "checkout", set, leftover]]}
                             }
-                            users.update_one(filter, update)
-                    #should send message to frontend that quantity requested is more than that available
-                    print("quantity requested is greater than that available, checked out all remaining units")
-                    return 0
+                            users.update_one(filter, update)'''
+                    return{"result":"quantity requested is greater than that available, checked out all remaining units" }
                 else:
                     currAvail = document["hwSet1Availability"]
                     filter = {"projectID": projectID}
@@ -109,16 +113,15 @@ def checkOut(projectID, set, qnt, username):
                         "$set": {"hwSet1Availability": currAvail - qnt}
                     }
                     projects.update_one(filter, update)
-                    for doc in users.find():
+                    '''for doc in users.find():
                         user = doc["username"]
                         if user == username:
                             filter = {"username": username}
                             update = {
                                 "$push": {"requests": [projectID, "checkout", set, qnt]}
                             }
-                            users.update_one(filter, update)
-                        print("successful checkout")
-                        return 1
+                            users.update_one(filter, update)'''
+                    return{"result": "successful checkout"}
             if set == 2:
                 if document["hwSet2Availability"] < qnt:
                     leftover = document["hwSet2Availability"]
@@ -127,17 +130,15 @@ def checkOut(projectID, set, qnt, username):
                         "$set": {"hwSet2Availability": 0}
                     }
                     projects.update_one(filter, update)
-                    for doc in users.find():
+                    '''for doc in users.find():
                         user = doc["username"]
                         if user == username:
                             filter = {"username": username}
                             update = {
                                 "$push": {"requests": [[projectID, "checkout", set, leftover]]}
                             }
-                            users.update_one(filter, update)
-                    #should send message to frontend that quantity requested is more than that available
-                    print("quantity requested is greater than that available, checked out all remaining units")
-                    return 0
+                            users.update_one(filter, update)'''
+                    return{"result": "quantity requested is greater than that available, checked out all remaining units"}
                 else:
                     currAvail = document["hwSet2Availability"]
                     filter = {"projectID": projectID}
@@ -145,23 +146,25 @@ def checkOut(projectID, set, qnt, username):
                         "$set": {"hwSet2Availability": currAvail - qnt}
                     }
                     projects.update_one(filter, update)
-                    for doc in users.find():
+                    '''for doc in users.find():
                         user = doc["username"]
                         if user == username:
                             filter = {"username": username}
                             update = {
                                 "$push": {"requests": [projectID, "checkout", set, qnt]}
                             }
-                            users.update_one(filter, update)
-                        print("successful checkout")
-                        return 1
+                            users.update_one(filter, update)'''
+                    return{"result": "successful checkout"}
 
-@app.route('/checkIn/<string:projectID>/<string:set>/<int:qnt>/<string:username>')
-def checkIn(projectID, set, qnt, username):
-    for doc in users.find():
+@app.route('/checkIn')
+def checkIn():
+    projectID = request.json["projectID"]
+    set = request.json["set"]
+    qnt = request.json["qnt"]
+    '''for doc in users.find():
         name = doc["username"]
-        if name == username:
-            for document in projects.find():
+        if name == username:'''
+    for document in projects.find():
                 projID = document["projectID"]
                 if projID == projectID:
                     if set == 1:
@@ -172,13 +175,12 @@ def checkIn(projectID, set, qnt, username):
                             "$set": {"hwSet1Availability": currAvail}
                         }
                         projects.update_one(filter, update)
-                        filter = {"username": username}
+                        '''filter = {"username": username}
                         update = {
                             "$push": {"requests": [projectID, "checkin", set, qnt]}
                         }
-                        users.update_one(filter, update)
-                        print("successful checkin")
-                        return 1
+                        users.update_one(filter, update)'''
+                        return{"result": "successful checkin"}
                     else:
                         currAvail = document["hwSet2Availability"]
                         filter = {"projectID": projectID}
@@ -187,13 +189,75 @@ def checkIn(projectID, set, qnt, username):
                             "$set": {"hwSet2Availability": currAvail}
                         }
                         projects.update_one(filter, update)
-                        filter = {"username": username}
+                        '''filter = {"username": username}
                         update = {
                             "$push": {"requests": [projectID, "checkin", set, qnt]}
                         }
-                        users.update_one(filter, update)
-                        print("successful checkin")
-                        return 1
+                        users.update_one(filter, update)'''
+                        return{"result": "successful checkin"}
+
+def encrypt(inputText, n, d):
+    if n < 1:
+        print("invalid input")
+        return None
+    if d != 1 and d != -1:
+        print("invalid input")
+        return None
+    rev = inputText[::-1]
+    shifted = ""
+    #if inputText.count(' ') > 0 and inputText.count('!') > 0 :
+    if d == 1:
+        for i in range(len(rev)):
+            if inputText[i] == " " or inputText[i] == "!":
+                shifted += inputText[i]
+                #print("invalid input")
+                #return None
+            else:
+                val = ord(rev[i])
+                val += n
+                c = chr(val)
+                shifted += c 
+    elif d == -1: 
+        for i in range(len(rev)):
+            if inputText[i] == " " or inputText[i] == "!":
+                shifted += inputText[i]
+                #print("invalid input")
+                #return None
+            else:
+                val = ord(rev[i])
+                val -= n
+                c = chr(val)
+                shifted += c
+    return shifted
+
+def decrypt(inputText, n, d):
+    if n < 1:
+        print("invalid input")
+        return None
+    if d != 1 and d != -1:
+        print("invalid input")
+        return None
+    rev = inputText[::-1]
+    unshifted = ""
+    if d == 1:
+        for i in range(len(rev)):
+            if inputText[i] == " " or inputText[i] == "!":
+                unshifted += inputText[i]
+            else:
+                val = ord(rev[i])
+                val -= n
+                c = chr(val)
+                unshifted += c 
+    elif d == -1: 
+        for i in range(len(rev)):
+            if inputText[i] == " " or inputText[i] == "!":
+                unshifted += inputText[i]
+            else:
+                val = ord(rev[i])
+                val -= n
+                c = chr(val)
+                unshifted += c
+    return unshifted
 
 if __name__ == '__main__':
     app.run(debug = True)

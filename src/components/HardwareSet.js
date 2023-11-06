@@ -20,6 +20,7 @@ function HardwareSet(props) {
             method: "POST",
             url: "/checkIn",
             data: {
+                projectID: props.projName,
                 set: props.hardwareNum,
                 qnt: input
             }
@@ -43,7 +44,7 @@ function HardwareSet(props) {
             method: "POST",
             url: "/checkOut",
             data: {
-                projectID: hardwareData.id,
+                projectID: props.projName,
                 set: props.hardwareNum,
                 qnt: input
             }
