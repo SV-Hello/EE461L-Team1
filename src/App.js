@@ -13,7 +13,7 @@ function App() {
           <switch>
             <Routes>
                 <Route exact path="/" element={<Login></Login>} />
-                <Route exact path="/AccessProjectPage" element={<AccessProjectPage></AccessProjectPage>} />
+                <Route path="/AccessProjectPage" element={<AccessProjectPage></AccessProjectPage>} />
             </Routes>
             </switch>
             {/*<Login></Login>*/}

@@ -25,10 +25,6 @@ function HardwareSet(props) {
             }
         }).then((response) => {
             console.log(response.data)
-            if(response.data == "successful checkin"){
-                let checking = parseInt(quantity) + parseInt(input);
-                setQuantity(checking);
-            }
         }).catch((error) => {
             if (error.response) {
               console.log(error.response)
@@ -36,6 +32,10 @@ function HardwareSet(props) {
               console.log(error.response.headers)
             }
         })
+        if(response.data == "successful checkin"){
+            let checking = parseInt(quantity) + parseInt(input);
+            setQuantity(checking);
+        }    
     }
 
     function CheckOut() {
@@ -43,25 +43,12 @@ function HardwareSet(props) {
             method: "POST",
             url: "/checkOut",
             data: {
-                projectID: props.hardwareData.id, //just 'hardwareData.id' was giving me an undefined error, not sure if it's actually supposed to be taken from props
+                projectID: hardwareData.id,
                 set: props.hardwareNum,
                 qnt: input
             }
         }).then((response) => {
             console.log(response.data)
-
-            if(input == '') {
-                alert("Invalid value!")
-                return;
-            }
-            if(response.data == "successful checkout"){
-                let checking = parseInt(quantity) - parseInt(input);
-                setQuantity(checking);
-            }
-            else{
-                /*print quantity requested is greater than that available, checked out all remaining units*/
-                setQuantity(0);
-            }
         }).catch((error) => {
             if (error.response) {
               console.log(error.response)
@@ -69,6 +56,18 @@ function HardwareSet(props) {
               console.log(error.response.headers)
             }
         })
+        if(input == '') {
+            alert("Invalid value!")
+            return;
+        }
+        if(response.data == "successful checkout"){
+            let checking = parseInt(quantity) - parseInt(input);
+            setQuantity(checking);
+        }
+        else{
+            /*print quantity requested is greater than that available, checked out all remaining units*/
+            setQuantity(0);
+        }
     }
 
     
