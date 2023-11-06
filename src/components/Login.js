@@ -7,14 +7,6 @@ import Shape from './Shape.js'
 import BackgroundBox from './BackgroundBox.js';
 import Project from './Project';
 
-// function log() {
-//     <nav>
-//     <ul>
-//     <li><Link to="/">AccessProjectPage</Link></li>
-//     </ul>
-//     </nav>
-// }
-
 const Spacer = ({ height, width }) => {
     return <div style={{ height, width }}></div>;
 };
@@ -24,8 +16,12 @@ const Login = () => {
         user: "",
         pass: ""
     });
+    const [passDisplay, setPassDisplay] = useState("");
 
     function requestUser() {
+        //delete when done testing linking
+        window.location.href = '/AccessProjectPage'
+
         axios({
             method: "POST",
             url: `/user/`,
@@ -35,6 +31,9 @@ const Login = () => {
             }
         }).then((response) => {
             console.log(response.data)
+            if(response.data["result"] == "success"){
+                window.location.href = '/AccessProjectPage'
+            }
         }).catch((error) => {
             if (error.response) {
               console.log(error.response)
@@ -54,6 +53,9 @@ const Login = () => {
             }
         }).then((response) => {
             console.log(response)
+            if(response.data["result"] == "user successfully added"){
+                window.location.href = '/AccessProjectPage'
+            }
         }).catch((error) => {
             if (error.response) {
               console.log(error.response)
@@ -70,6 +72,29 @@ const Login = () => {
         )
     }
 
+    function handleChangePass(event) { 
+        const {value, name} = event.target
+
+        let completePass = ""
+        if(value.length > userData.pass.length){
+            completePass = userData.pass + value.charAt(value.length-1)
+        }
+        else{
+            completePass = userData.pass.substring(0,userData.pass.length-1)
+        }
+
+        let dots = ""
+        for (let i = 0; dots.length < completePass.length-1; i++){
+            dots = dots + "*"
+        }
+        dots = dots + completePass.substring(value.length-1)
+
+        setPassDisplay(dots)
+        setUserData(prevNote => ({
+            ...prevNote, [name]: completePass})
+        )
+    }
+
     return(
         <div>
 
@@ -78,48 +103,47 @@ const Login = () => {
             
                 <Shape width = "400px" height = "50px" text = "User Login"></Shape>
                 
-                Username: <input onChange={handleChange} 
+                Username: <input onChange={() => {handleChange()}} 
                     type="user"
                     text={userData.user} 
                     name="user" 
                     placeholder="Username" 
                     value={userData.user} />
                 <Spacer height="20px" />
-                Password: <input onChange={handleChange} 
+                Password: <input onChange={() => {handleChangePass()}} 
                     type="pass"
                     text={userData.pass} 
                     name="pass" 
                     placeholder="Password" 
-                    value={userData.pass} />
+                    value={passDisplay} />
                 <Spacer height="20px" />
-                <button onClick={requestUser}>Sign In</button>
+                <button onClick={() => {requestUser()}}>Sign In</button>
                 
             </BackgroundBox>
             
             {/*Sign Up*/}
             <BackgroundBox>
                 <Shape width = "400px" height = "50px" text = "New Sign Up"></Shape>
-               
-                Username: <input onChange={handleChange} 
+            
+                Username: <input onChange={() => {handleChange()}} 
                     type="new_user"
                     text={userData.new_user} 
                     name="new_user" 
                     placeholder="Username" 
                     value={userData.new_user} />
-               
+            
                 <Spacer height="20px" />
-           
-                Password: <input onChange={handleChange} 
+        
+                Password: <input onChange={() => {handleChange()}} 
                     type="new_pass"
                     text={userData.new_pass} 
                     name="new_pass" 
                     placeholder="Password" 
                     value={userData.new_pass} />
-               
+            
                 <Spacer height="20px" />
-                <button onClick={pushUser}>Create Account</button>
+                <button onClick={() => {pushUser()}}>Create Account</button>
             </BackgroundBox>
-    
         </div>
     )
 

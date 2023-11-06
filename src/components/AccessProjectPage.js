@@ -24,7 +24,9 @@ const AccessProjectPage = () => {
         setExistingProjectID(e.target.existingProjectID);
     }
 
-
+    const logOut = () => {
+        window.location.href = '/'
+    };
     
     const createProject = () => {
         axios({
@@ -89,7 +91,7 @@ const AccessProjectPage = () => {
                         <div> Name &nbsp;
                             <TextField
                             value = {name}
-                            onChange = {updateName}
+                            onChange = {() => {updateName()}}
                             type="text"
                             variant="outlined"
                             size="small"></TextField>
@@ -98,7 +100,7 @@ const AccessProjectPage = () => {
                         <div> Desrc. &nbsp;
                             <TextField
                             value = {description}
-                            onChange = {updateDecription}
+                            onChange = {() => {updateDecription()}}
                             type="text"
                             variant="outlined"
                             size="small"></TextField>
@@ -107,7 +109,7 @@ const AccessProjectPage = () => {
                         <div> ProjID &nbsp;
                             <TextField
                             value = {newProjectID}
-                            onChange = {updateNewProjectID}
+                            onChange = {() => {updateNewProjectID()}}
                             type="text"
                             variant="outlined"
                             size="small"></TextField>
@@ -116,7 +118,7 @@ const AccessProjectPage = () => {
 
                     <Button 
                     color = "primary"  
-                    onClick = {createProject}
+                    onClick = {() => {createProject()}}
                     variant="contained"
                     >Create</Button>
                 </td>
@@ -131,7 +133,7 @@ const AccessProjectPage = () => {
                     <div> ProjID &nbsp;
                             <TextField
                             value = {existingProjectID}
-                            onChange = {updateExistingProjectID}
+                            onChange = {() => {updateExistingProjectID()}}
                             type="text"
                             variant="outlined"
                             size="small"></TextField>
@@ -151,10 +153,10 @@ const AccessProjectPage = () => {
     </table>
 
    {/*Currently does nothing*/}
-   <Button 
+   <button 
         color = "primary"   
         variant="Contained"
-        >Back to Login Page</Button>
+        onClick= {() => {logOut()}}>Back to Login Page</button>
 
     </BackgroundBox>
     )
