@@ -103,14 +103,14 @@ const Login = () => {
             
                 <Shape width = "400px" height = "50px" text = "User Login"></Shape>
                 
-                Username: <input onChange={() => {handleChange()}} 
+                Username: <input onChange={(event) => {handleChange(event)}} 
                     type="user"
                     text={userData.user} 
                     name="user" 
                     placeholder="Username" 
                     value={userData.user} />
                 <Spacer height="20px" />
-                Password: <input onChange={() => {handleChangePass()}} 
+                Password: <input onChange={(event) => {handleChangePass(event)}} 
                     type="pass"
                     text={userData.pass} 
                     name="pass" 
@@ -125,7 +125,7 @@ const Login = () => {
             <BackgroundBox>
                 <Shape width = "400px" height = "50px" text = "New Sign Up"></Shape>
             
-                Username: <input onChange={() => {handleChange()}} 
+                Username: <input onChange={(event) => {handleChange(event)}} 
                     type="new_user"
                     text={userData.new_user} 
                     name="new_user" 
@@ -134,7 +134,7 @@ const Login = () => {
             
                 <Spacer height="20px" />
         
-                Password: <input onChange={() => {handleChange()}} 
+                Password: <input onChange={(event) => {handleChange(event)}} 
                     type="new_pass"
                     text={userData.new_pass} 
                     name="new_pass" 

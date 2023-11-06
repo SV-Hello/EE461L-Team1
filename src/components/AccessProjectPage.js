@@ -91,7 +91,7 @@ const AccessProjectPage = () => {
                         <div> Name &nbsp;
                             <TextField
                             value = {name}
-                            onChange = {() => {updateName()}}
+                            onChange = {(event) => {updateName(event)}}
                             type="text"
                             variant="outlined"
                             size="small"></TextField>
@@ -100,7 +100,7 @@ const AccessProjectPage = () => {
                         <div> Desrc. &nbsp;
                             <TextField
                             value = {description}
-                            onChange = {() => {updateDecription()}}
+                            onChange = {(event) => {updateDecription(event)}}
                             type="text"
                             variant="outlined"
                             size="small"></TextField>
@@ -109,7 +109,7 @@ const AccessProjectPage = () => {
                         <div> ProjID &nbsp;
                             <TextField
                             value = {newProjectID}
-                            onChange = {() => {updateNewProjectID()}}
+                            onChange = {(event) => {updateNewProjectID(event)}}
                             type="text"
                             variant="outlined"
                             size="small"></TextField>
@@ -133,7 +133,7 @@ const AccessProjectPage = () => {
                     <div> ProjID &nbsp;
                             <TextField
                             value = {existingProjectID}
-                            onChange = {() => {updateExistingProjectID()}}
+                            onChange = {(event) => {updateExistingProjectID(event)}}
                             type="text"
                             variant="outlined"
                             size="small"></TextField>
