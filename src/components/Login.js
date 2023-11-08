@@ -19,9 +19,6 @@ const Login = () => {
     const [passDisplay, setPassDisplay] = useState("");
 
     function requestUser() {
-        //delete when done testing linking
-        window.location.href = '/AccessProjectPage'
-
         axios({
             method: "POST",
             url: `/user/`,
