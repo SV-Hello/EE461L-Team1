@@ -51,17 +51,16 @@ def addUser():
     users.insert_one(document)
     return {"result": "user successfully added"}
 
-@app.route('/getProject')
+@app.route('/getProject', methods=["POST"])
 def checkProject():
     id = request.json["id"]
-    for document in projects.find():
-        projID = document["projectID"]
-        if projID == id:
-            return{"result": "project found"}
-        else:
-            return{"result": "project with this id doesn't exist"}
+    try:
+        proj = projects.find({"projectID": id}).next()
+    except StopIteration:
+        {"result": "not exist"}
+    return{"result": "success"}
 
-@app.route('/createproj')
+@app.route('/createproj', methods=["POST"])
 def createProject():
     id = request.json["id"]
     description = request.json["description"]

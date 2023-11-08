@@ -6,57 +6,57 @@ import './styles.css';
 import axios from 'axios';
 
 const AccessProjectPage = () => {
-    const [name, setName] = useState('');
-    const [description, setDescr] = useState('');
-    const [newProjectID, setNewProjectID] = useState('');
-    const [existingProjectID, setExistingProjectID] = useState('');
+    const [projectData, setProjectData] = useState({
+        name: "",
+        description: "",
+        newProjectID: "",
+        existingProjectID: ""
+    });
 
-    const updateName = (e) => {
-        setName(e.target.name);
+    function handleChange(event) { 
+        const {value, name} = event.target
+        setProjectData(prevNote => ({
+            ...prevNote, [name]: value})
+        )
     }
-    const updateDecription = (e) => {
-        setDescr(e.target.description);
-    }
-    const updateNewProjectID = (e) => {
-        setNewProjectID(e.target.newProjectID);
-    }
-    const updateExistingProjectID = (e) => {
-        setExistingProjectID(e.target.existingProjectID);
-    }
-
-
     
-    const createProject = () => {
+    function createProject() {
         axios({
             method: "POST",
             url: "/createproj",
             data: {
-                id: existingProjectID,
-                description: description,
-                name: name,
+                id: projectData.newProjectID,
+                description: projectData.description,
+                name: projectData.name,
                 hwSet1Cap: 100,
                 hwSet2Cap: 100
             }
         }).then((response) => {
-            console.log(response)
+            console.log(response.data)
+            if (response.data.result == "success") {
+                window.open("/project")
+            }
         }).catch((error) => {
             if (error.response) {
               console.log(error.response)
               console.log(error.response.status)
               console.log(error.response.headers)
-              }
-          })
-    };
+            }
+        })
+    }
 
-    const useProject = () => {
+    function getProject() {
         axios({
             method: "POST",
             url: "/getProject",
             data: {
-                id: existingProjectID
+                id: projectData.existingProjectID
             }
         }).then((response) => {
             console.log(response.data)
+            if (response.data.result == "success") {
+                window.open("/project")
+            }
         }).catch((error) => {
             if (error.response) {
               console.log(error.response)
@@ -88,27 +88,30 @@ const AccessProjectPage = () => {
                     <div className='input-container'>
                         <div> Name &nbsp;
                             <TextField
-                            value = {name}
-                            onChange = {() => {updateName()}}
+                            value = {projectData.name}
+                            onChange = {handleChange}
                             type="text"
+                            name="name"
                             variant="outlined"
                             size="small"></TextField>
                         </div>
                         &nbsp;
-                        <div> Desrc. &nbsp;
+                        <div> Desc &nbsp;
                             <TextField
-                            value = {description}
-                            onChange = {() => {updateDecription()}}
+                            value = {projectData.description}
+                            onChange = {handleChange}
                             type="text"
+                            name="description"
                             variant="outlined"
                             size="small"></TextField>
                         </div>
                         &nbsp;
                         <div> ProjID &nbsp;
                             <TextField
-                            value = {newProjectID}
-                            onChange = {() => {updateNewProjectID()}}
+                            value = {projectData.newProjectID}
+                            onChange = {handleChange}
                             type="text"
+                            name="newProjectID"
                             variant="outlined"
                             size="small"></TextField>
                         </div>
@@ -130,9 +133,10 @@ const AccessProjectPage = () => {
 
                     <div> ProjID &nbsp;
                             <TextField
-                            value = {existingProjectID}
-                            onChange = {() => {updateExistingProjectID()}}
+                            value = {projectData.existingProjectID}
+                            onChange = {handleChange}
                             type="text"
+                            name="existingProjectID"
                             variant="outlined"
                             size="small"></TextField>
                         
@@ -140,7 +144,7 @@ const AccessProjectPage = () => {
             
                     <Button 
                     color = "primary"  
-                    onClick = {useProject}
+                    onClick = {getProject}
                     variant="contained"
                     >Use</Button>
                 </td>

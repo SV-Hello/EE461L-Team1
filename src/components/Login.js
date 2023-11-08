@@ -19,6 +19,13 @@ const Login = () => {
         new_pass: ""
     });
 
+    function handleChange(event) { 
+        const {value, name} = event.target
+        setUserData(prevNote => ({
+            ...prevNote, [name]: value})
+        )
+    }
+
     function requestUser() {
         axios({
             method: "POST",
@@ -29,6 +36,9 @@ const Login = () => {
             }
         }).then((response) => {
             console.log(response.data)
+            if (response.data.result == "success") {
+                window.open("/AccessProjectPage")
+            }
         }).catch((error) => {
             if (error.response) {
               console.log(error.response)
@@ -48,6 +58,9 @@ const Login = () => {
             }
         }).then((response) => {
             console.log(response)
+            if (response.data.result == "success") {
+                window.open("/AccessProjectPage")
+            }
         }).catch((error) => {
             if (error.response) {
               console.log(error.response)
@@ -55,13 +68,6 @@ const Login = () => {
               console.log(error.response.headers)
               }
           })
-    }
-
-    function handleChange(event) { 
-        const {value, name} = event.target
-        setUserData(prevNote => ({
-            ...prevNote, [name]: value})
-        )
     }
 
     return(

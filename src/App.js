@@ -3,6 +3,7 @@ import {BrowserRouter as Router, Routes, Route, Link} from "react-router-dom"
 import './App.css';
 import AccessProjectPage from './components/AccessProjectPage';
 import Login from './components/Login';
+import HardwareSet from './components/HardwareSet';
 
 function App() {
   return (
@@ -14,10 +15,9 @@ function App() {
             <Routes>
                 <Route exact path="/" element={<Login></Login>} />
                 <Route path="/AccessProjectPage" element={<AccessProjectPage></AccessProjectPage>} />
+                <Route path="/project" element={<HardwareSet></HardwareSet>} />
             </Routes>
-            </switch>
-            {/*<Login></Login>*/}
-            {/*<AccessProjectPage></AccessProjectPage>*/}
+          </switch>
           </div>
         </Router>
       </header>
