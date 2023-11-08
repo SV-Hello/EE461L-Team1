@@ -24,9 +24,7 @@ const AccessProjectPage = () => {
         setExistingProjectID(e.target.existingProjectID);
     }
 
-    const logOut = () => {
-        window.location.href = '/'
-    };
+
     
     const createProject = () => {
         axios({
@@ -91,7 +89,7 @@ const AccessProjectPage = () => {
                         <div> Name &nbsp;
                             <TextField
                             value = {name}
-                            onChange = {(event) => {updateName(event)}}
+                            onChange = {() => {updateName()}}
                             type="text"
                             variant="outlined"
                             size="small"></TextField>
@@ -100,7 +98,7 @@ const AccessProjectPage = () => {
                         <div> Desrc. &nbsp;
                             <TextField
                             value = {description}
-                            onChange = {(event) => {updateDecription(event)}}
+                            onChange = {() => {updateDecription()}}
                             type="text"
                             variant="outlined"
                             size="small"></TextField>
@@ -109,7 +107,7 @@ const AccessProjectPage = () => {
                         <div> ProjID &nbsp;
                             <TextField
                             value = {newProjectID}
-                            onChange = {(event) => {updateNewProjectID(event)}}
+                            onChange = {() => {updateNewProjectID()}}
                             type="text"
                             variant="outlined"
                             size="small"></TextField>
@@ -118,7 +116,7 @@ const AccessProjectPage = () => {
 
                     <Button 
                     color = "primary"  
-                    onClick = {() => {createProject()}}
+                    onClick = {createProject}
                     variant="contained"
                     >Create</Button>
                 </td>
@@ -133,7 +131,7 @@ const AccessProjectPage = () => {
                     <div> ProjID &nbsp;
                             <TextField
                             value = {existingProjectID}
-                            onChange = {(event) => {updateExistingProjectID(event)}}
+                            onChange = {() => {updateExistingProjectID()}}
                             type="text"
                             variant="outlined"
                             size="small"></TextField>
@@ -153,10 +151,10 @@ const AccessProjectPage = () => {
     </table>
 
    {/*Currently does nothing*/}
-   <button 
+   <Button 
         color = "primary"   
         variant="Contained"
-        onClick= {() => {logOut()}}>Back to Login Page</button>
+        >Back to Login Page</Button>
 
     </BackgroundBox>
     )
