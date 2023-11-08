@@ -7,14 +7,6 @@ import Shape from './Shape.js'
 import BackgroundBox from './BackgroundBox.js';
 import Project from './Project';
 
-// function log() {
-//     <nav>
-//     <ul>
-//     <li><Link to="/">AccessProjectPage</Link></li>
-//     </ul>
-//     </nav>
-// }
-
 const Spacer = ({ height, width }) => {
     return <div style={{ height, width }}></div>;
 };
@@ -22,7 +14,9 @@ const Spacer = ({ height, width }) => {
 const Login = () => {
     const [userData, setUserData] = useState({
         user: "",
-        pass: ""
+        pass: "",
+        new_user: "",
+        new_pass: ""
     });
 
     function requestUser() {
@@ -77,15 +71,15 @@ const Login = () => {
             
                 <Shape width = "400px" height = "50px" text = "User Login"></Shape>
                 
-                Username: <input onChange={() => {handleChange()}} 
-                    type="user"
+                Username: <input onChange={handleChange}
+                    type="text"
                     text={userData.user} 
                     name="user" 
                     placeholder="Username" 
                     value={userData.user} />
                 <Spacer height="20px" />
-                Password: <input onChange={() => {handleChangePass()}} 
-                    type="pass"
+                Password: <input onChange={handleChange}
+                    type="password"
                     text={userData.pass} 
                     name="pass" 
                     placeholder="Password" 
@@ -99,8 +93,8 @@ const Login = () => {
             <BackgroundBox>
                 <Shape width = "400px" height = "50px" text = "New Sign Up"></Shape>
             
-                Username: <input onChange={() => {handleChange()}} 
-                    type="new_user"
+                Username: <input onChange={handleChange}
+                    type="text"
                     text={userData.new_user} 
                     name="new_user" 
                     placeholder="Username" 
@@ -108,8 +102,8 @@ const Login = () => {
                
                 <Spacer height="20px" />
         
-                Password: <input onChange={() => {handleChange()}} 
-                    type="new_pass"
+                Password: <input onChange={handleChange}
+                    type="password"
                     text={userData.new_pass} 
                     name="new_pass" 
                     placeholder="Password" 

@@ -33,10 +33,10 @@ function HardwareSet(props) {
               console.log(error.response.headers)
             }
         })
-        if(response.data == "successful checkin"){
-            let checking = parseInt(quantity) + parseInt(input);
-            setQuantity(checking);
-        }    
+        // if(response.data == "successful checkin"){
+        //     let checking = parseInt(quantity) + parseInt(input);
+        //     setQuantity(checking);
+        // }    
     }
 
     function CheckOut() {
@@ -61,10 +61,10 @@ function HardwareSet(props) {
             alert("Invalid value!")
             return;
         }
-        if(response.data == "successful checkout"){
-            let checking = parseInt(quantity) - parseInt(input);
-            setQuantity(checking);
-        }
+        // if(response.data == "successful checkout"){
+        //     let checking = parseInt(quantity) - parseInt(input);
+        //     setQuantity(checking);
+        // }
         else{
             /*print quantity requested is greater than that available, checked out all remaining units*/
             setQuantity(0);

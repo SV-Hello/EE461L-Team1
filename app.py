@@ -21,15 +21,18 @@ projects = projectDB.get_collection('Project')
 @app.route('/user/', methods=['POST'])
 def checkUser():
     user = request.json["username"]
+    try:
+        user = users.find({"username": user}).next()
+    except StopIteration:
+        return {"result": "not exist"}
+    
     password = request.json["password"]
-    user = users.find({"username": user}).next()
-    if user is not None:
-        decryptedPass = decrypt(user["password"], 3, 1)
-        if decryptedPass == password:
-            return {"result": "success"}
-        else:
-            return {"result": "failed"}
-    return {"result": "not exist"}
+    decryptedPass = decrypt(user["password"], 3, 1)
+    if decryptedPass == password:
+        return {"result": "success"}
+    else:
+        return {"result": "failed"}
+
 
 @app.route('/adduser', methods=['POST'])
 def addUser():
