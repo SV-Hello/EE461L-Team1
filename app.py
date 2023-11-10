@@ -60,6 +60,12 @@ def checkProject():
         {"result": "not exist"}
     return{"result": "success"}
 
+@app.route('/getproj/<projectID>', methods=['POST'])
+def getProject(projectID):
+    proj = projects.find({"projectID": projectID}).next()
+    params = request.json["params"]
+    return {key: proj[key] for key in params}
+
 @app.route('/createproj', methods=["POST"])
 def createProject():
     id = request.json["id"]

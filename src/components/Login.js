@@ -1,6 +1,6 @@
 import React from 'react';
 import { useState } from 'react';
-import {Routes, Route, Link,} from "react-router-dom"
+import {Routes, Route, Link, useNavigate} from "react-router-dom"
 import axios from 'axios';
 
 import Shape from './Shape.js'
@@ -12,6 +12,8 @@ const Spacer = ({ height, width }) => {
 };
 
 const Login = () => {
+    const navigate = useNavigate();
+
     const [userData, setUserData] = useState({
         user: "",
         pass: "",
@@ -37,7 +39,7 @@ const Login = () => {
         }).then((response) => {
             console.log(response.data)
             if (response.data.result == "success") {
-                window.open("/AccessProjectPage")
+                navigate("/AccessProjectPage");
             }
         }).catch((error) => {
             if (error.response) {
@@ -59,7 +61,7 @@ const Login = () => {
         }).then((response) => {
             console.log(response)
             if (response.data.result == "success") {
-                window.open("/AccessProjectPage")
+                navigate("/AccessProjectPage");
             }
         }).catch((error) => {
             if (error.response) {

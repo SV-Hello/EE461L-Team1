@@ -1,12 +1,36 @@
-import React from 'react';
-import { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import BackgroundBox from './BackgroundBox.js';
 import HardwareSet from './HardwareSet.js';
 import axios from 'axios';
 import {Button} from '@mui/material';
-import {Link} from "react-router-dom"
+import {Link, useParams} from "react-router-dom"
 
-function Project(props) {
+const Project = () => {
+    const [projectData, setProjectData] = useState({
+        name: "",
+        description: "",
+    });
+
+    const {projectID} = useParams();
+
+    useEffect(() => {
+        axios({
+            method: "POST",
+            url: `/getproj/${projectID}`,
+            data: {
+                params: ["name", "description"]
+            }
+        }).then((response) => {
+            setProjectData(response.data)
+        }).catch((error) => {
+            if (error.response) {
+              console.log(error.response)
+              console.log(error.response.status)
+              console.log(error.response.headers)
+            }
+        });
+    }, []);
+
     const tableStyle = {
         borderCollapse: 'collapse',
         width: '100'
@@ -21,17 +45,19 @@ function Project(props) {
         <BackgroundBox backgroundColor = '#7FFFD4'>
 
             <div className="project_title_font">
-                ProjectID: {props.projName || -1}
-            </div>  
+                ProjectID: {projectID || -1}
+            </div>
+
+            <div className="project_title_font">
+                Name: {projectData.name}
+            </div>
 
         <table style={tableStyle}>
             <tbody>
-               
-                <td style={cellStyle}>            
-                    <HardwareSet hardwareNum = '1'></HardwareSet>
-                    <HardwareSet hardwareNum = '2'></HardwareSet>     
+                <td style={cellStyle}>
+                    <HardwareSet hardwareNum = '1' projectID={projectID}></HardwareSet>
+                    <HardwareSet hardwareNum = '2' projectID={projectID}></HardwareSet>     
                 </td>
-              
             </tbody>
         </table>
 

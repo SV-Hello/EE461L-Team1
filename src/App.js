@@ -4,6 +4,7 @@ import './App.css';
 import AccessProjectPage from './components/AccessProjectPage';
 import Login from './components/Login';
 import HardwareSet from './components/HardwareSet';
+import Project from './components/Project';
 
 function App() {
   return (
@@ -15,7 +16,7 @@ function App() {
             <Routes>
                 <Route exact path="/" element={<Login></Login>} />
                 <Route path="/AccessProjectPage" element={<AccessProjectPage></AccessProjectPage>} />
-                <Route path="/project" element={<HardwareSet></HardwareSet>} />
+                <Route path="projects/:projectID" element={<Project></Project>} />
             </Routes>
           </switch>
           </div>

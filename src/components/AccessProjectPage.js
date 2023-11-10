@@ -1,11 +1,13 @@
 import React, {useState} from 'react';
 import BackgroundBox from './BackgroundBox.js';
-import {Link} from "react-router-dom"
+import {Link, useNavigate} from "react-router-dom"
 import {Button, TextField, Input} from '@mui/material';
 import './styles.css';
 import axios from 'axios';
 
 const AccessProjectPage = () => {
+    const navigate = useNavigate();
+
     const [projectData, setProjectData] = useState({
         name: "",
         description: "",
@@ -34,7 +36,7 @@ const AccessProjectPage = () => {
         }).then((response) => {
             console.log(response.data)
             if (response.data.result == "success") {
-                window.open("/project")
+                navigate(`/projects/${projectData.newProjectID}`);
             }
         }).catch((error) => {
             if (error.response) {
@@ -55,7 +57,7 @@ const AccessProjectPage = () => {
         }).then((response) => {
             console.log(response.data)
             if (response.data.result == "success") {
-                window.open("/project")
+                navigate(`/projects/${projectData.existingProjectID}`);
             }
         }).catch((error) => {
             if (error.response) {
