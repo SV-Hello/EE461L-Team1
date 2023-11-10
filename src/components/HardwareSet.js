@@ -23,7 +23,6 @@ const HardwareSet = (props) => {
                 quantity: response.data[`hwSet${props.hardwareNum}Availability`],
                 capacity: response.data[`hwSet${props.hardwareNum}Capacity`]
             });
-            console.log(projectData);
         }).catch((error) => {
             if (error.response) {
               console.log(error.response)
@@ -37,61 +36,55 @@ const HardwareSet = (props) => {
         setInput(e.target.value);
     }
     
-    // function CheckIn() {
-    //     axios({
-    //         method: "POST",
-    //         url: "/checkIn",
-    //         data: {
-    //             projectID: props.projName,
-    //             set: props.hardwareNum,
-    //             qnt: input
-    //         }
-    //     }).then((response) => {
-    //         console.log(response.data)
-    //     }).catch((error) => {
-    //         if (error.response) {
-    //           console.log(error.response)
-    //           console.log(error.response.status)
-    //           console.log(error.response.headers)
-    //         }
-    //     })
-    //     // if(response.data == "successful checkin"){
-    //     //     let checking = parseInt(quantity) + parseInt(input);
-    //     //     setQuantity(checking);
-    //     // }    
-    // }
+    function CheckIn() {
+        axios({
+            method: "POST",
+            url: "/checkIn",
+            data: {
+                projectID: props.projectID,
+                set: props.hardwareNum,
+                qnt: parseInt(input)
+            }
+        }).then((response) => {
+            console.log(response.data)
+            if(response.data.result == "success") {
+                setProjectData((prevNote) => ({
+                    ...prevNote, quantity: projectData.quantity + parseInt(input)
+                }))
+            }
+        }).catch((error) => {
+            if (error.response) {
+              console.log(error.response)
+              console.log(error.response.status)
+              console.log(error.response.headers)
+            }
+        })
+    }
 
-    // function CheckOut() {
-    //     axios({
-    //         method: "POST",
-    //         url: "/checkOut",
-    //         data: {
-    //             projectID: props.projName,
-    //             set: props.hardwareNum,
-    //             qnt: input
-    //         }
-    //     }).then((response) => {
-    //         console.log(response.data)
-    //     }).catch((error) => {
-    //         if (error.response) {
-    //           console.log(error.response)
-    //           console.log(error.response.status)
-    //           console.log(error.response.headers)
-    //         }
-    //     })
-    //     if(input == '') {
-    //         alert("Invalid value!")
-    //         return;
-    //     }
-    //     // if(response.data == "successful checkout"){
-    //     //     let checking = parseInt(quantity) - parseInt(input);
-    //     //     setQuantity(checking);
-    //     // }
-    //     else{
-    //         /*print quantity requested is greater than that available, checked out all remaining units*/
-    //         setQuantity(0);
-    //     }
-    // }
+    function CheckOut() {
+        axios({
+            method: "POST",
+            url: "/checkOut",
+            data: {
+                projectID: props.projectID,
+                set: props.hardwareNum,
+                qnt: parseInt(input)
+            }
+        }).then((response) => {
+            console.log(response.data)
+            if(response.data.result == "success") {
+                setProjectData((prevNote) => ({
+                    ...prevNote, quantity: projectData.quantity - parseInt(input)
+                }))
+            }
+        }).catch((error) => {
+            if (error.response) {
+              console.log(error.response)
+              console.log(error.response.status)
+              console.log(error.response.headers)
+            }
+        })
+    }
 
     
     return(
@@ -113,13 +106,13 @@ const HardwareSet = (props) => {
 
             <Button 
                 color = "primary"  
-                // onClick = {CheckIn}
+                onClick = {CheckIn}
                 variant="outlined"
             >Check In</Button>
             &nbsp;
             <Button 
                 color = "primary"  
-                // onClick = {CheckOut}
+                onClick = {CheckOut}
                 variant="outlined"
             >Check Out</Button>
         </div>

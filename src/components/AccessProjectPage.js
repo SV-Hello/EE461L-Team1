@@ -68,6 +68,8 @@ const AccessProjectPage = () => {
         })
     };
 
+    function exitProjectPage() {navigate("/");}
+
     const tableStyle = {
         borderCollapse: 'collapse',
         width: '100'
@@ -156,8 +158,8 @@ const AccessProjectPage = () => {
     &nbsp;
     </table>
 
-   {/*Currently does nothing*/}
-   <Button 
+   <Button
+        onClick = {exitProjectPage}
         color = "primary"   
         variant="Contained"
         >Back to Login Page</Button>

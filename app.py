@@ -41,7 +41,7 @@ def addUser():
     for document in users.find():
         name = document["username"]
         if name == username:
-            return {"result": "user already exists"}
+            return {"result": "failed", "message": "user already exists"}
     encryptedPass = encrypt(password, 3, 1)
     document = {
         "username": username,
@@ -49,7 +49,7 @@ def addUser():
         "requests": []
     }
     users.insert_one(document)
-    return {"result": "user successfully added"}
+    return {"result": "success"}
 
 @app.route('/getProject', methods=["POST"])
 def checkProject():
@@ -76,7 +76,7 @@ def createProject():
     for document in projects.find():
         projID = document["projectID"]
         if projID == id:
-            return{"result": "project with this id already exists"}
+            return{"result": "failed", "message": "project with this id already exists"}
     document = {
         "projectID": id,
         "name": name,
@@ -87,122 +87,37 @@ def createProject():
         "hwSet2Availability": hwSet2Cap
     }
     projects.insert_one(document)
-    return{"result": "project added"}
+    return{"result": "success"}
 
-@app.route('/checkOut')
+@app.route('/checkOut', methods=["POST"])
 def checkOut():
     projectID = request.json["projectID"]
-    set = request.json["set"]
+    num = request.json["set"]
     qnt = request.json["qnt"]
-    for document in projects.find():
-        projID = document["projectID"]
-        if projID == projectID:
-            if set == 1:
-                if document["hwSet1Availability"] < qnt:
-                    leftover = document["hwSet1Availability"]
-                    filter = {"projectID": projectID}
-                    update = {
-                        "$set": {"hwSet1Availability": 0}
-                    }
-                    projects.update_one(filter, update)
-                    '''for doc in users.find():
-                        user = doc["username"]
-                        if user == username:
-                            filter = {"username": username}
-                            update = {
-                                "$push": {"requests": [[projectID, "checkout", set, leftover]]}
-                            }
-                            users.update_one(filter, update)'''
-                    return{"result":"quantity requested is greater than that available, checked out all remaining units" }
-                else:
-                    currAvail = document["hwSet1Availability"]
-                    filter = {"projectID": projectID}
-                    update = {
-                        "$set": {"hwSet1Availability": currAvail - qnt}
-                    }
-                    projects.update_one(filter, update)
-                    '''for doc in users.find():
-                        user = doc["username"]
-                        if user == username:
-                            filter = {"username": username}
-                            update = {
-                                "$push": {"requests": [projectID, "checkout", set, qnt]}
-                            }
-                            users.update_one(filter, update)'''
-                    return{"result": "successful checkout"}
-            if set == 2:
-                if document["hwSet2Availability"] < qnt:
-                    leftover = document["hwSet2Availability"]
-                    filter = {"projectID": projectID}
-                    update = {
-                        "$set": {"hwSet2Availability": 0}
-                    }
-                    projects.update_one(filter, update)
-                    '''for doc in users.find():
-                        user = doc["username"]
-                        if user == username:
-                            filter = {"username": username}
-                            update = {
-                                "$push": {"requests": [[projectID, "checkout", set, leftover]]}
-                            }
-                            users.update_one(filter, update)'''
-                    return{"result": "quantity requested is greater than that available, checked out all remaining units"}
-                else:
-                    currAvail = document["hwSet2Availability"]
-                    filter = {"projectID": projectID}
-                    update = {
-                        "$set": {"hwSet2Availability": currAvail - qnt}
-                    }
-                    projects.update_one(filter, update)
-                    '''for doc in users.find():
-                        user = doc["username"]
-                        if user == username:
-                            filter = {"username": username}
-                            update = {
-                                "$push": {"requests": [projectID, "checkout", set, qnt]}
-                            }
-                            users.update_one(filter, update)'''
-                    return{"result": "successful checkout"}
+    proj = projects.find({"projectID": projectID}).next()
+    currAvail = proj[f"hwSet{num}Availability"]
+    currAvail -= qnt
+    if currAvail < 0:
+        return {"result": "failed", "message": "requested checkout amount greater than what is available"}
+    filter = {"projectID": projectID}
+    update = {"$set": {f"hwSet{num}Availability": currAvail}}
+    projects.update_one(filter, update)
+    return {'result': 'success'}
 
-@app.route('/checkIn')
+@app.route('/checkIn', methods=['POST'])
 def checkIn():
     projectID = request.json["projectID"]
-    set = request.json["set"]
+    num = request.json["set"]
     qnt = request.json["qnt"]
-    '''for doc in users.find():
-        name = doc["username"]
-        if name == username:'''
-    for document in projects.find():
-                projID = document["projectID"]
-                if projID == projectID:
-                    if set == 1:
-                        currAvail = document["hwSet1Availability"]
-                        filter = {"projectID": projectID}
-                        currAvail += qnt
-                        update = {
-                            "$set": {"hwSet1Availability": currAvail}
-                        }
-                        projects.update_one(filter, update)
-                        '''filter = {"username": username}
-                        update = {
-                            "$push": {"requests": [projectID, "checkin", set, qnt]}
-                        }
-                        users.update_one(filter, update)'''
-                        return{"result": "successful checkin"}
-                    else:
-                        currAvail = document["hwSet2Availability"]
-                        filter = {"projectID": projectID}
-                        currAvail += qnt
-                        update = {
-                            "$set": {"hwSet2Availability": currAvail}
-                        }
-                        projects.update_one(filter, update)
-                        '''filter = {"username": username}
-                        update = {
-                            "$push": {"requests": [projectID, "checkin", set, qnt]}
-                        }
-                        users.update_one(filter, update)'''
-                        return{"result": "successful checkin"}
+    proj = projects.find({"projectID": projectID}).next()
+    currAvail = proj[f"hwSet{num}Availability"]
+    currAvail += qnt
+    if currAvail > proj[f"hwSet{num}Capacity"]:
+        return {'result': 'failed', 'message': 'capacity exceeded'}
+    filter = {"projectID": projectID}
+    update = {"$set": {f"hwSet{num}Availability": currAvail}}
+    projects.update_one(filter, update)
+    return {'result': 'success'}
 
 def encrypt(inputText, n, d):
     if n < 1:
