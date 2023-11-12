@@ -5,12 +5,18 @@ import sys
 from flask import Flask, jsonify, url_for, redirect, request
 #from flask_cors import cross_origin, CORS
 
-app = Flask(__name__)
-#app = Flask(__name__, static_folder='./build', static_url_path='/')
+#app = Flask(__name__)
+flask_app = Flask(__name__, static_folder='./build', static_url_path='/')
 #cors = CORS(app)
-app.config['CORS_HEADERS'] = 'Content-Type'
+flask_app.config['CORS_HEADERS'] = 'Content-Type'
 
+@flask_app.route('/', methods=["GET"])
+def index():
+    return flask_app.send_static_file('index.html')
 
+@flask_app.errorhandler(404)
+def not_found(exception):
+    return flask_app.send_static_file('index.html')
 
 client = pymongo.MongoClient('mongodb+srv://shriyabangaru:NAGXkC053TXkWTZk@cluster0.enyjvhm.mongodb.net/?retryWrites=true&w=majority')
 userDB = client.get_database('Users')
@@ -18,7 +24,7 @@ users = userDB.get_collection('Users')
 projectDB = client.get_database('Projects')
 projects = projectDB.get_collection('Project')
 
-@app.route('/user/', methods=['POST'])
+@flask_app.route('/user/', methods=['POST'])
 def checkUser():
     user = request.json["username"]
     try:
@@ -34,7 +40,7 @@ def checkUser():
         return {"result": "failed"}
 
 
-@app.route('/adduser', methods=['POST'])
+@flask_app.route('/adduser', methods=['POST'])
 def addUser():
     username = request.json["username"]
     password = request.json["password"]
@@ -51,7 +57,7 @@ def addUser():
     users.insert_one(document)
     return {"result": "success"}
 
-@app.route('/getProject', methods=["POST"])
+@flask_app.route('/getProject', methods=["POST"])
 def checkProject():
     id = request.json["id"]
     try:
@@ -60,13 +66,13 @@ def checkProject():
         {"result": "not exist"}
     return{"result": "success"}
 
-@app.route('/getproj/<projectID>', methods=['POST'])
+@flask_app.route('/getproj/<projectID>', methods=['POST'])
 def getProject(projectID):
     proj = projects.find({"projectID": projectID}).next()
     params = request.json["params"]
     return {key: proj[key] for key in params}
 
-@app.route('/createproj', methods=["POST"])
+@flask_app.route('/createproj', methods=["POST"])
 def createProject():
     id = request.json["id"]
     description = request.json["description"]
@@ -89,7 +95,7 @@ def createProject():
     projects.insert_one(document)
     return{"result": "success"}
 
-@app.route('/checkOut', methods=["POST"])
+@flask_app.route('/checkOut', methods=["POST"])
 def checkOut():
     projectID = request.json["projectID"]
     num = request.json["set"]
@@ -104,7 +110,7 @@ def checkOut():
     projects.update_one(filter, update)
     return {'result': 'success'}
 
-@app.route('/checkIn', methods=['POST'])
+@flask_app.route('/checkIn', methods=['POST'])
 def checkIn():
     projectID = request.json["projectID"]
     num = request.json["set"]
@@ -183,7 +189,7 @@ def decrypt(inputText, n, d):
     return unshifted
 
 if __name__ == '__main__':
-    app.run(debug = True)
+    flask_app.run(host='0.0.0.0', debug = False, port=os.environ.get('PORT',80))
 #addUser("johndoe", "1234")
 #checkUser("shriya", "1234")
 #createProject("A1", "birdhouse", "birdhouse", 100, 100)
